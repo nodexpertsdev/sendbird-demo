@@ -1,0 +1,128 @@
+<div class="body">
+  <div class="body-left">
+    <div class="body-left-top">
+      <div class="top-logo">
+        <img
+        src="https://dxstmhyqfqr1o.cloudfront.net/web-basic/icon-username-landing.svg"
+          width="50"
+          height="50"
+          class="logo-image"
+        />
+      </div>
+      <div class="top-text">
+        ChatApp
+      </div>
+    </div>
+    <div class="body-left-list">
+      <div class="chat-type">
+        <div class="chat-type-title" id="open_chat">OPEN CHAT</div>
+        <div>
+          <div class="icon-create-chat" id="open_chat_add"></div>
+        </div>
+      </div>
+      <div id="open_list" class="chat-list">
+        <div id="default_item_open" class="default-item">
+          Start by selecting or creating a channel.
+        </div>
+      </div>
+      <div class="chat-type">
+        <div>GROUP CHAT</div>
+        <div>
+          <div class="icon-create-chat" id="group_chat_add"></div>
+        </div>
+      </div>
+      <div id="group_list" class="chat-list chat-list-group">
+        <div id="default_item_group" class="default-item">
+          Start by inviting user to create a channel.
+        </div>
+        <div  (click)="chatTopMenuActivity(i)"  class="list-item" *ngFor="let channel of channelList; let i = index">
+          <div class="item-top">
+            <div class="item-count">{{channel.memberCount}}</div>
+            <div class="item-title">{{ getTitle(channel) }}</div>
+          </div>
+          <div class="item-bottom">
+            <div class="item-message">
+              <div class="item-message-text">{{ lastMessageText(channel) }}</div>
+              <div class="item-message-unread">{{channel.unreadMessageCount}}</div>
+            </div>
+            <div class="item-time" data-origin="1557649460027">{{ lastMessageTimeText(channel) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="body-left-bottom" id="user_info">
+      <div class="bottom-profile">
+        <img
+          src="https://dxstmhyqfqr1o.cloudfront.net/web-basic/image-profile.svg"
+          width="30"
+          height="30"
+          class="image-profile"
+        />
+      </div>
+      <div class="bottom-nickname">
+        <div class="nickname-title">username</div>
+        <div class="nickname-content"></div>
+      </div>
+    </div>
+  </div>
+  <div class="body-center">
+    <div class="chat-root">
+      <div class="chat-top">
+        <div class="chat-title is-group">
+          {{ chartTitle }}
+        </div>
+        <div class="chat-button">
+          <div class="button-invite"></div>
+          <div class="button-hide"></div>
+          <div class="button-leave"></div>
+        </div>
+      </div>
+      <div class="chat-main-root">
+        <div class="chat-main">
+          <div class="chat-body" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+            <div id="443891181" class="chat-message">
+              <!-- <div class="message-admin">
+                sunil, ali and ㅇㅂㅇㅂㅈㅇ joined.
+              </div> -->
+            </div>
+            <div id="443891832" class="chat-message" data-req-id="" *ngFor = "let message of massagesList">
+              <div class="message-content">
+                <div class="message-nickname is-user">{{message?.sender?.nickname }} :</div>
+                <div class="message-content">{{message?.message}}</div>
+                <div class="time is-user" style="">{{timestampToTime(message.createdAt)}}</div>
+                <!-- <div class="read active">2</div> -->
+              </div>
+            </div>
+          </div>
+          <div class="chat-input">
+            <div class="typing-field"></div>
+            <label class="input-file">
+              <input type="file" id="attach_file_id" style="display: none;" />
+            </label>
+            <div class="input-text">
+              <input  #textRef (keyup.enter)="eventHandler(textRef)" class="input-text-area"  placeholder="Write a chat...">
+              <!-- </textarea> -->
+            </div>
+          </div>
+        </div>
+        <div class="chat-menu-root">
+          <div class="menu-list">
+            <div class="list-title">
+              <div class="list-back"></div>
+              <div class="list-text"></div>
+            </div>
+            <div class="list-body"></div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-users">MEMBERS</div>
+            <div class="menu-arrow"></div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-blocked">BLOCKED</div>
+            <div class="menu-arrow"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
