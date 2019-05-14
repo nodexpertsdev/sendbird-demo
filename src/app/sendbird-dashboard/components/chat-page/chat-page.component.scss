@@ -13,7 +13,7 @@
     justify-content: space-between;
     width: 420px;
     height: 100vh;
-    background-color: $color-purple-dark;
+    // background-color: $color-purple-dark;
     & > .body-left-top {
       display: flex;
       padding: 20px;
@@ -79,10 +79,11 @@
           display: block;
           padding: 10px;
           margin: 0 20px;
-          color: $color-purple-text-light;
+          color: $color-black;
           font-size: 16px;
           border: 1px dashed $color-purple-text-light;
           @include border-radius(4px);
+          line-height: 1.2;
         }
       }
       & > .chat-list.chat-list-group {
@@ -92,7 +93,7 @@
     & > .body-left-bottom {
       display: flex;
       padding: 20px;
-      background-color: $color-purple-darker;
+      background-color: $color-grey-bg;
       & > .bottom-profile {
         display: flex;
         height: 40px;
@@ -110,14 +111,14 @@
         padding-left: 10px;
         & > .nickname-title {
           display: flex;
-          color: $color-purple-text-dark;
+          color: $color-light-black;
           font-size: 14px;
         }
         & > .nickname-content {
           display: inline-block;
           max-width: 150px;
           height: 18px;
-          color: $color-purple-text-light;
+          color: $color-light-black;
           font-size: 16px;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -353,16 +354,18 @@
       justify-content: flex-start;
       flex-direction: column;
       cursor: pointer;
+      font-size: 14px;
     }
     & > .message-nickname.is-user {
       font-weight: 600;
-      color: $color-purple-deep;
+      color: $color-light-black;
       cursor: initial;
     }
 
     & > .message-content {
       display: inline;
       white-space: pre-line;
+      font-size: 14px;
     }
     & > .message-content.is-file {
       cursor: pointer;
@@ -512,11 +515,19 @@
   padding: 6px 20px;
   cursor: pointer;
   @include hover {
-    background-color: $color-purple-darker;
+    background-color: $color-grey-bg;
+  //  & > .item-top {
+  //     color:$color-white;
+  //   }
+  //   .item-bottom .item-message .item-message-text {
+  //     color:$color-white;
+  //   }
   }
   & > .item-top {
     display: flex;
-    color: $color-purple-text-light;
+    color: $color-black;
+    font-weight: 600;
+    text-transform: capitalize;
     & > .item-count {
       width: 18px;
       height: 18px;
@@ -535,6 +546,7 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+      font-size: 14px;
     }
   }
   & > .item-bottom {
@@ -543,7 +555,6 @@
     justify-content: space-between;
     flex-direction: column;
     font-size: 14px;
-    margin-top: 4px;
     padding-left: 26px;
     & > .item-message {
       display: flex;
@@ -555,8 +566,8 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        color: $color-purple-text-light;
-        opacity: 0.7;
+        color: $color-light-black;
+        font-size: 13px;
       }
       & > .item-message-unread {
         display: none;

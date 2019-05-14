@@ -2,9 +2,11 @@
 $color-transparent: transparent !default;
 
 $color-black-border: #2C2D30 !default;
-$color-black: #000000 !default;
+$color-black: #4d4f5b !default;
 $color-black-text: #555555 !default;
 $color-black-text-light: #abb8c4 !default;
+$color-light-black: #2b2b2b;
+$color-grey-bg: #ccc;
 
 $color-gray-admin: #e8ecef !default;
 $color-gray-dark: #dedede !default;
@@ -17,7 +19,7 @@ $color-blue-dark: #328fe6 !default;
 $color-blue: #32c5e6 !default;
 
 
-$color-purple-darker: #463c66 !default;
+$color-purple-darker: #4ea6c6 !default;
 $color-purple-dark: #4E4273 !default;
 $color-purple: #6e5baa !default;
 $color-purple-light: #6742d6 !default;
@@ -36,4 +38,4 @@ $color-chat-border: #e0e2e5 !default;
 $color-chat-select: #f8f9fa !default;
 
 // Font
-$font-family-exo2: 'Exo 2';
+$font-family-exo2: sans-serif;

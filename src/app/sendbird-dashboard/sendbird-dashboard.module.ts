@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+// import { NgScrollbarModule } from 'ngx-scrollbar';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SendbirdDashboardComponent } from './containers/sendbird-dashboard/sendbird-dashboard.component';
@@ -12,6 +13,7 @@ import { CanActivateRouteGuard } from './can-activate-route.guard';
   imports: [
     CommonModule,
     FormsModule,
+    // NgScrollbarModule,
     SendbirdDashboardRoutingModule
   ],
   providers: [SendbirdDashboardService, CanActivateRouteGuard],
