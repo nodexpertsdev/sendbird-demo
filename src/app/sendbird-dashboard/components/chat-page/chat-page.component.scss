@@ -11,6 +11,8 @@
 }
 
 .body {
+  overflow: hidden;
+  height: 100vh;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -26,7 +28,6 @@
     & > .body-left-top {
       display: flex;
       padding: 20px;
-      justify-content: center;
       & > .top-logo {
         display: flex;
         align-items: center;
@@ -373,8 +374,9 @@
 
     & > .message-content {
       display: inline;
-      white-space: pre-line;
+      // white-space: pre-line;
       font-size: 14px;
+      word-break: break-all;
     }
     & > .message-content.is-file {
       cursor: pointer;
@@ -436,10 +438,10 @@
 
 
 .chat-input {
-  display: flex;
+  // display: flex;
   padding: 20px;
   border-top: 1px solid $color-chat-border;
-  background-color: $color-white;
+  background-color: $color-gray-dark;
 
   & > .typing-field {
     display: none;
@@ -524,7 +526,7 @@
   padding: 6px 20px;
   cursor: pointer;
   @include hover {
-    background-color: $color-grey-bg;
+    background-color: $color-gray-dark;
   //  & > .item-top {
   //     color:$color-white;
   //   }
@@ -608,8 +610,90 @@
   }
 }
 
-
-
-
-
-
+.pull-right{
+ text-align: right;
+    & > .message-content{
+    padding: 15px;
+    background: $color-skyblue;
+    color:$color-white;
+    width: 38%;
+    border-radius: 10px;
+    text-align: left;
+    display: inline-block;
+    & > .message-nickname.is-user {
+      color:$color-white !important;
+    }
+  }
+}
+.pull-left{
+ & > .message-content{
+  padding: 15px;
+  background: $color-gray-dark;
+  width: 38%;
+  display: inline-block;
+  border-radius: 17px;
+  }
+}
+.hide-content{
+  display: none !important;
+}
+.sidebar-section{
+  padding:10px;
+  margin: 0 auto;
+  & > input {
+ min-width: 320px;
+ border:none;
+ padding: 0 20px 0 40px;
+ height: 50px;
+ background: $color-gray-dark;
+ border-radius: 5px;
+  }
+  & > i{
+    position: absolute;
+    left: 25px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    color:$color-skyblue;
+  }
+}
+.attach-file{
+  height: 38px !important;
+}
+.top-logo{
+  width: 100px;
+    height: 100px;
+    background: $color-gray-dark;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.body-left-top{
+& > .top-text{
+  color:$color-skyblue !important;
+  font-size: 20px !important;
+  margin-left: 20px !important;
+}
+}
+.chat-input{
+  background: #ededed;
+ & > .input-text-area {
+  display: block;
+  width: 100%;
+  min-height: 100px;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.send-btn{
+  float:right;
+.send{
+  background: $color-skyblue;
+  color:$color-white;
+  border:none;
+  min-width: 130px;
+  padding: 7px;
+}
+}
+}

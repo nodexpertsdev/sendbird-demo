@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 export class SendbirdDashboardService {
  public userData: {user_id: string, nickname: string} = null;
 
+ channelList: any = null;
+
   constructor() { }
 
   setUserData(data) {

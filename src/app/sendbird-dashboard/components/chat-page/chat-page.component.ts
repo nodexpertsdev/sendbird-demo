@@ -19,10 +19,10 @@ import { config } from '../../containers/sendbird-dashboard/config';
 export class ChatPageComponent implements OnInit {
   sendbirdAction: any;
    handler: any;
-   channelList: any ;
+  //  channelList: any ;
    channelIndex: any ;
-   massagesList = [];
    userConfig: any;
+   massagesList = [];
    chartTitle: any;
    getTitle: any = _getTitle;
    lastMessageTimeText: any = _lastMessageTimeText;
@@ -53,16 +53,19 @@ export class ChatPageComponent implements OnInit {
         if (error) {
             return;
         }
-        this.channelList = channelList;
+        if ( !this.sendbirdDashboardService.channelList || (channelList.length !== this.sendbirdDashboardService.channelList.length)  ) {
+        this.sendbirdDashboardService.channelList = channelList;
+        }
+        // this.sendbirdDashboardService.channelList = channelList;
     });
 }
   }
 
   chatTopMenuActivity(i) {
     this.channelIndex = i;
-    this.chartTitle = _chatTitle(this.channelList[i]);
-    const messageListQuery = this.channelList[i].createPreviousMessageListQuery();
-    messageListQuery.limit = 30;
+    this.chartTitle = _chatTitle(this.sendbirdDashboardService.channelList[i]);
+    const messageListQuery = this.sendbirdDashboardService.channelList[i].createPreviousMessageListQuery();
+    messageListQuery.limit = 100;
     messageListQuery.reverse = true;
 
     messageListQuery.load((messageList, error) => {
@@ -76,7 +79,7 @@ export class ChatPageComponent implements OnInit {
   eventHandler(e) {
     const message = e.value;
     e.value = '';
-    this.channelList[this.channelIndex].sendUserMessage(message, () => {
+    this.sendbirdDashboardService.channelList[this.channelIndex].sendUserMessage(message, () => {
       this.chatTopMenuActivity(this.channelIndex);
     });
   }
