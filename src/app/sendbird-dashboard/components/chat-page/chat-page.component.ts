@@ -20,6 +20,7 @@ export class ChatPageComponent implements OnInit {
    sb: any;
    channelList: any ;
    channelIndex: any ;
+   userConfig:any;
    massagesList = [];
    chartTitle: any;
    getTitle: any = _getTitle;
@@ -32,15 +33,15 @@ export class ChatPageComponent implements OnInit {
    }
 
   ngOnInit() {
-    const userConfig =  this.sendbirdDashboardService.getUserData();
+     this.userConfig =  this.sendbirdDashboardService.getUserData();
     this.sb = new SendBird({appId: config.APP_ID});
     this.sb.connect(
-      userConfig.user_id,
+      this.userConfig.user_id,
     (user, error) => {
       if (error) {
         console.log(error);
       } else {
-        this.sb.updateCurrentUserInfo(userConfig.nickname, null, () => {
+        this.sb.updateCurrentUserInfo(this.userConfig.nickname, null, () => {
           console.log(user);
           this.getChannelList();
         });
