@@ -13,6 +13,10 @@
         ChatApp
       </div>
     </div>
+    <div class="sidebar-section">
+        <i class="fas fa-search"></i>
+      <input type="search" placeholder="Search message...">
+    </div>
     <div class="body-left-list">
       <div class="chat-type">
         <div class="chat-type-title" id="open_chat">OPEN CHAT</div>
@@ -50,7 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="body-left-bottom" id="user_info">
+    <div class="body-left-bottom hide-content" id="user_info">
       <div class="bottom-profile">
         <img
           src="https://dxstmhyqfqr1o.cloudfront.net/web-basic/image-profile.svg"
@@ -85,7 +89,7 @@
                 sunil, ali and ㅇㅂㅇㅂㅈㅇ joined.
               </div> -->
             </div>
-            <div id="443891832" class="chat-message" data-req-id="" *ngFor = "let message of massagesList">
+            <div id="443891832" class="chat-message" data-req-id="" [ngClass]="{'pull-right':message._sender.userId === userConfig.user_id,'pull-left':message._sender.userId !== userConfig.user_id}" *ngFor = "let message of massagesList">
               <div class="message-content">
                 <div class="message-nickname is-user">{{message?.sender?.nickname }} :</div>
                 <div class="message-content">{{message?.message}}</div>
@@ -96,12 +100,13 @@
           </div>
           <div class="chat-input">
             <div class="typing-field"></div>
-            <label class="input-file">
+                <textarea  #textRef  class="input-text-area"  >
+                </textarea>
+            <!-- <label class="input-file attach-file">
               <input type="file" id="attach_file_id" style="display: none;" />
-            </label>
-            <div class="input-text">
-              <input  #textRef (keyup.enter)="eventHandler(textRef)" class="input-text-area"  placeholder="Write a chat...">
-              <!-- </textarea> -->
+            </label> -->
+            <div class="send-btn">
+            <button class="send" (click)="eventHandler(textRef)">Send</button>
             </div>
           </div>
         </div>
