@@ -1,6 +1,15 @@
 @import '../../../../variables.scss';
 @import '../../../../mixins.scss';
 @import '../../../../icons.scss';
+
+.text-success{
+  background-color: red
+}
+
+.text-success1{
+  background-color: black
+}
+
 .body {
   display: flex;
   flex-direction: row;
@@ -598,3 +607,9 @@
     font-weight: 600;
   }
 }
+
+
+
+
+
+

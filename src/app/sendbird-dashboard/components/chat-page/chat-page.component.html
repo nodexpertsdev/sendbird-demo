@@ -28,7 +28,7 @@
       <div class="chat-type">
         <div>GROUP CHAT</div>
         <div>
-          <div class="icon-create-chat" id="group_chat_add"></div>
+          <div class="icon-create-chat" [routerLink]="['/chat/userlist']" id="group_chat_add"></div>
         </div>
       </div>
       <div id="group_list" class="chat-list chat-list-group">
@@ -86,7 +86,7 @@
               </div> -->
             </div>
             <div id="443891832" class="chat-message" data-req-id="" *ngFor = "let message of massagesList">
-              <div class="message-content">
+              <div class="message-content" [ngClass]="{'text-success':message._sender.userId ===  userConfig.user_id,'text-success1':message._sender.userId !==  userConfig.user_id}">
                 <div class="message-nickname is-user">{{message?.sender?.nickname }} :</div>
                 <div class="message-content">{{message?.message}}</div>
                 <div class="time is-user" style="">{{timestampToTime(message.createdAt)}}</div>

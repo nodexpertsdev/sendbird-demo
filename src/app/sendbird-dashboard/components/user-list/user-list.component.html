@@ -1,0 +1,29 @@
+
+<body data-gr-c-s-loaded="true">
+      <div class="list-root">
+        <div class="list-body">
+            <div class="list-top">
+              <div class="list-title">User List</div>
+              <div class="list-button">
+                <div class="button-create">CREATE</div>
+                <div class="button-exit" (click)="goBack()">
+
+                </div>
+              </div>
+            </div>
+            <div class="list-hr"></div>
+            <div class="list-content">
+                <div id="{{user.userId}}" class="user-item" *ngFor="let user of userList">
+                  <div class="user-info">
+                    <div class="user-profile" style="background-image: url(&quot;https://sendbird.com/main/img/profiles/profile_37_512px.png&quot;);">
+                    </div><div class="user-nickname">{{user.nickname}}</div>
+                    <div class="user-online"></div>
+                  </div><div class="user-state">
+                    <div class="user-time">{{timestampToTime(user.lastSeenAt)}}</div>
+                    <div class="user-select"></div>
+                  </div></div>
+            </div>
+        </div>
+      </div>
+  
+ </body>

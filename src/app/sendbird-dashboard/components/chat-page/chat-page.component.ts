@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SendbirdDashboardService } from '../../sendbird-dashboard.service';
-import * as SendBird from 'sendbird';
 import {timestampToTime} from './js-components/utils';
+import {SendBirdAction} from './js-components/SendBirdAction';
 import {
   _getTitle,
   _lastMessageTimeText,
@@ -17,10 +17,12 @@ import { config } from '../../containers/sendbird-dashboard/config';
   styleUrls: ['./chat-page.component.scss']
 })
 export class ChatPageComponent implements OnInit {
-   sb: any;
+  sendbirdAction: any;
+   handler: any;
    channelList: any ;
    channelIndex: any ;
    massagesList = [];
+   userConfig: any;
    chartTitle: any;
    getTitle: any = _getTitle;
    lastMessageTimeText: any = _lastMessageTimeText;
@@ -32,27 +34,19 @@ export class ChatPageComponent implements OnInit {
    }
 
   ngOnInit() {
-    const userConfig =  this.sendbirdDashboardService.getUserData();
-    this.sb = new SendBird({appId: config.APP_ID});
-    this.sb.connect(
-      userConfig.user_id,
-    (user, error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        this.sb.updateCurrentUserInfo(userConfig.nickname, null, () => {
-          console.log(user);
-          this.getChannelList();
-        });
-      }
-    }
-  );
+   this.userConfig =  this.sendbirdDashboardService.getUserData();
+   this.sendbirdAction = SendBirdAction.getInstance();
+   this.sendbirdAction.connect(this.userConfig.user_id, this.userConfig.nickname).then(() => {
+    this.getChannelList();
+   }).catch((err) => {
+     console.log(err);
+   });
   }
 
   getChannelList() {
-    const channelListQuery = this.sb.GroupChannel.createMyGroupChannelListQuery();
+    const channelListQuery = this.sendbirdAction.sb.GroupChannel.createMyGroupChannelListQuery();
     channelListQuery.includeEmpty = true;
-    channelListQuery.limit = 100;
+    // channelListQuery.limit = 100;
 
     if (channelListQuery.hasNext) {
     channelListQuery.next((channelList, error) => {
@@ -86,5 +80,7 @@ export class ChatPageComponent implements OnInit {
       this.chatTopMenuActivity(this.channelIndex);
     });
   }
+
+
 
 }
