@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
-  {path: 'login', component: UserLoginComponent },
+  {path: '', component: UserLoginComponent },
   {path: 'chat', component: ChatPageComponent, canActivate: [CanActivateRouteGuard] },
   {path: 'chat/userlist', component: UserListComponent },
   {path: '**', component: UserLoginComponent }

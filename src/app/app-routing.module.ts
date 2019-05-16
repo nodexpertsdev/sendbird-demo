@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { SendbirdDashboardComponent } from './sendbird-dashboard/containers/sendbird-dashboard/sendbird-dashboard.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: 'login', pathMatch: 'full'}
+  {path: '', redirectTo: '/', pathMatch: 'full'}
 ];
 
 @NgModule({

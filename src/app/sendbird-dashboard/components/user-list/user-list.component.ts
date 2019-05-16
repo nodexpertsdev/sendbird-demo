@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {SendBirdAction} from '../chat-page/js-components/SendBirdAction';
 import { Router } from '@angular/router';
-import {timestampToTime} from '../chat-page//js-components/utils';
+import {timestampToTime} from '../chat-page/js-components/utils';
+import {SendbirdDashboardService} from '../../sendbird-dashboard.service';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -12,7 +13,7 @@ export class UserListComponent implements OnInit {
   userList: any;
   timestampToTime: any;
 
-  constructor( private router: Router) {
+  constructor( private router: Router, private sendbirdDashboardService: SendbirdDashboardService) {
     this.sendbirdAction = SendBirdAction.getInstance();
    }
 
@@ -26,10 +27,32 @@ export class UserListComponent implements OnInit {
     });
   }
 
+  getUserId(userId) {
+    const index = this.sendbirdDashboardService.selectedUserIds.indexOf(userId);
+    if (index > -1) {
+      this.sendbirdDashboardService.selectedUserIds.splice(index, 1);
+      return false;
+    } else {
+      this.sendbirdDashboardService.selectedUserIds.push(userId);
+      return true;
+    }
+  }
+
   goBack() {
-
     this.router.navigate(['/chat']);
+  }
 
+  createChanel() {
+    SendBirdAction.getInstance()
+      .createGroupChannel(this.sendbirdDashboardService.selectedUserIds)
+      .then(channel => {
+        this.sendbirdDashboardService.channelList.unshift(channel);
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
+    this.sendbirdDashboardService.selectedUserIds = [];
+    this.goBack();
   }
 
 }

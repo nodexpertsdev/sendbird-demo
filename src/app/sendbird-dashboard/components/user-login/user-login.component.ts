@@ -18,7 +18,7 @@ export class UserLoginComponent implements OnInit {
 
   onSubmit(f: NgForm) {
    this.sendbirdDashboardService.setUserData(f.value);
-   this.router.navigate(['/chat']);
+   this.router.navigate(['chat']);
   }
 
 
