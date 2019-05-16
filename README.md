@@ -40,7 +40,7 @@ If you want to change `APP_ID`, change `APP_ID` in const.js to the other `APP_ID
 You can test the sample with local server by running the following command.  
 
 ```bash
-npm run start:dev
+npm run start
 ``` 
 
 3. Build the sample
