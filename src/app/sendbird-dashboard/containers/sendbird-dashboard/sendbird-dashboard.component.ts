@@ -6,11 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sendbird-dashboard.component.scss']
 })
 export class SendbirdDashboardComponent implements OnInit {
-
   constructor() { }
-
   ngOnInit() {
-
   }
-
 }
