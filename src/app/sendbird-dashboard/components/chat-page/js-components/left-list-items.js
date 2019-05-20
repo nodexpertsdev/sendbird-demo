@@ -11,7 +11,7 @@ import {
 export const _getTitle = (channel) => {
     return channel.isOpenChannel()
       ? `# ${channel.name}`
-      : channel.members
+      : channel.members.slice(1)
           .map(member => {
             return (member.nickname);
           })

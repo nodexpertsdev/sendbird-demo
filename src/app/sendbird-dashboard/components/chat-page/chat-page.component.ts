@@ -72,6 +72,7 @@ export class ChatPageComponent implements OnInit {
         }
         if ( !this.sendbirdDashboardService.channelList ) {
         this.sendbirdDashboardService.channelList = channelList;
+        this.chatTopMenuActivity(0);
         }
     });
 }

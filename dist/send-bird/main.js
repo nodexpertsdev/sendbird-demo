@@ -327,7 +327,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' }
+    { path: '', redirectTo: '/', pathMatch: 'full' }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -523,8 +523,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sendbird_dashboard_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../sendbird-dashboard.service */ "./src/app/sendbird-dashboard/sendbird-dashboard.service.ts");
 /* harmony import */ var _js_components_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./js-components/utils */ "./src/app/sendbird-dashboard/components/chat-page/js-components/utils.js");
 /* harmony import */ var _js_components_SendBirdAction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./js-components/SendBirdAction */ "./src/app/sendbird-dashboard/components/chat-page/js-components/SendBirdAction.js");
-/* harmony import */ var _js_components_left_list_items__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./js-components/left-list-items */ "./src/app/sendbird-dashboard/components/chat-page/js-components/left-list-items.js");
-/* harmony import */ var _js_components_chat_top_menu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./js-components/chat-top-menu */ "./src/app/sendbird-dashboard/components/chat-page/js-components/chat-top-menu.js");
+/* harmony import */ var _js_components_SendBirdChatEvent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./js-components/SendBirdChatEvent */ "./src/app/sendbird-dashboard/components/chat-page/js-components/SendBirdChatEvent.js");
+/* harmony import */ var _js_components_left_list_items__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./js-components/left-list-items */ "./src/app/sendbird-dashboard/components/chat-page/js-components/left-list-items.js");
+/* harmony import */ var _js_components_chat_top_menu__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./js-components/chat-top-menu */ "./src/app/sendbird-dashboard/components/chat-page/js-components/chat-top-menu.js");
+
 
 
 
@@ -536,9 +538,9 @@ var ChatPageComponent = /** @class */ (function () {
     function ChatPageComponent(sendbirdDashboardService) {
         this.sendbirdDashboardService = sendbirdDashboardService;
         this.massagesList = [];
-        this.getTitle = _js_components_left_list_items__WEBPACK_IMPORTED_MODULE_5__["_getTitle"];
-        this.lastMessageTimeText = _js_components_left_list_items__WEBPACK_IMPORTED_MODULE_5__["_lastMessageTimeText"];
-        this.lastMessageText = _js_components_left_list_items__WEBPACK_IMPORTED_MODULE_5__["_lastMessageText"];
+        this.getTitle = _js_components_left_list_items__WEBPACK_IMPORTED_MODULE_6__["_getTitle"];
+        this.lastMessageTimeText = _js_components_left_list_items__WEBPACK_IMPORTED_MODULE_6__["_lastMessageTimeText"];
+        this.lastMessageText = _js_components_left_list_items__WEBPACK_IMPORTED_MODULE_6__["_lastMessageText"];
         this.timestampToTime = _js_components_utils__WEBPACK_IMPORTED_MODULE_3__["timestampToTime"];
     }
     ChatPageComponent.prototype.ngOnInit = function () {
@@ -547,6 +549,22 @@ var ChatPageComponent = /** @class */ (function () {
         this.sendbirdAction = _js_components_SendBirdAction__WEBPACK_IMPORTED_MODULE_4__["SendBirdAction"].getInstance();
         this.sendbirdAction.connect(this.userConfig.user_id, this.userConfig.nickname).then(function () {
             _this.getChannelList();
+            var channelEvent = new _js_components_SendBirdChatEvent__WEBPACK_IMPORTED_MODULE_5__["SendBirdChatEvent"]();
+            channelEvent.onMessageReceived = function (channel, message) {
+                if (_this.sendbirdDashboardService.channelList.indexOf(channel) > 0) {
+                    // find the current index of 'role':
+                    var index = _this.sendbirdDashboardService.channelList.indexOf(channel);
+                    // using splice to remove elements from the array, starting at
+                    // the identified index, and affecting 1 element(s):
+                    _this.sendbirdDashboardService.channelList.splice(index, 1);
+                    // putting the 'role' string back in the array:
+                    _this.sendbirdDashboardService.channelList.unshift(channel);
+                }
+                else {
+                    _this.sendbirdDashboardService.channelList.unshift(channel);
+                }
+                _this.chatTopMenuActivity(_this.channelIndex);
+            };
         }).catch(function (err) {
             console.log(err);
         });
@@ -555,23 +573,22 @@ var ChatPageComponent = /** @class */ (function () {
         var _this = this;
         var channelListQuery = this.sendbirdAction.sb.GroupChannel.createMyGroupChannelListQuery();
         channelListQuery.includeEmpty = true;
-        // channelListQuery.limit = 100;
+        channelListQuery.limit = 100;
         if (channelListQuery.hasNext) {
             channelListQuery.next(function (channelList, error) {
                 if (error) {
                     return;
                 }
-                if (!_this.sendbirdDashboardService.channelList || (channelList.length !== _this.sendbirdDashboardService.channelList.length)) {
+                if (!_this.sendbirdDashboardService.channelList) {
                     _this.sendbirdDashboardService.channelList = channelList;
                 }
-                // this.sendbirdDashboardService.channelList = channelList;
             });
         }
     };
     ChatPageComponent.prototype.chatTopMenuActivity = function (i) {
         var _this = this;
         this.channelIndex = i;
-        this.chartTitle = Object(_js_components_chat_top_menu__WEBPACK_IMPORTED_MODULE_6__["_chatTitle"])(this.sendbirdDashboardService.channelList[i]);
+        this.chartTitle = Object(_js_components_chat_top_menu__WEBPACK_IMPORTED_MODULE_7__["_chatTitle"])(this.sendbirdDashboardService.channelList[i]);
         var messageListQuery = this.sendbirdDashboardService.channelList[i].createPreviousMessageListQuery();
         messageListQuery.limit = 100;
         messageListQuery.reverse = true;
@@ -976,6 +993,92 @@ class SendBirdAction {
 
 /***/ }),
 
+/***/ "./src/app/sendbird-dashboard/components/chat-page/js-components/SendBirdChatEvent.js":
+/*!********************************************************************************************!*\
+  !*** ./src/app/sendbird-dashboard/components/chat-page/js-components/SendBirdChatEvent.js ***!
+  \********************************************************************************************/
+/*! exports provided: SendBirdChatEvent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SendBirdChatEvent", function() { return SendBirdChatEvent; });
+/* harmony import */ var sendbird__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sendbird */ "./node_modules/sendbird/SendBird.min.js");
+/* harmony import */ var sendbird__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sendbird__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./src/app/sendbird-dashboard/components/chat-page/js-components/utils.js");
+
+
+
+let instance = null;
+
+class SendBirdChatEvent {
+  constructor() {
+    if (instance) {
+      return instance;
+    }
+
+    this.sb = sendbird__WEBPACK_IMPORTED_MODULE_0___default.a.getInstance();
+    this.key = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["uuid4"])();
+    this._createChannelHandler();
+
+    this.onMessageReceived = null;
+    this.onMessageUpdated = null;
+    this.onMessageDeleted = null;
+
+    this.onReadReceiptUpdated = null;
+    this.onTypingStatusUpdated = null;
+    instance = this;
+  }
+
+  /**
+   * Channel Handler
+   */
+  _createChannelHandler() {
+    const handler = new this.sb.ChannelHandler();
+    handler.onMessageReceived = (channel, message) => {
+      if (this.onMessageReceived) {
+          console.log('===========================')
+        this.onMessageReceived(channel, message);
+      }
+    };
+    handler.onMessageUpdated = (channel, message) => {
+      if (this.onMessageUpdated) {
+        this.onMessageUpdated(channel, message);
+      }
+    };
+    handler.onMessageDeleted = (channel, messageId) => {
+      if (this.onMessageDeleted) {
+        this.onMessageDeleted(channel, messageId);
+      }
+    };
+
+    handler.onReadReceiptUpdated = groupChannel => {
+      if (this.onReadReceiptUpdated) {
+        this.onReadReceiptUpdated(groupChannel);
+      }
+    };
+    handler.onTypingStatusUpdated = groupChannel => {
+      if (this.onTypingStatusUpdated) {
+        this.onTypingStatusUpdated(groupChannel);
+      }
+    };
+    this.sb.addChannelHandler(this.key, handler);
+  }
+
+  remove() {
+    this.sb.removeChannelHandler(this.key);
+  }
+
+  static getInstance() {
+    return instance;
+  }
+}
+
+
+
+
+/***/ }),
+
 /***/ "./src/app/sendbird-dashboard/components/chat-page/js-components/chat-top-menu.js":
 /*!****************************************************************************************!*\
   !*** ./src/app/sendbird-dashboard/components/chat-page/js-components/chat-top-menu.js ***!
@@ -987,11 +1090,13 @@ class SendBirdAction {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_chatTitle", function() { return _chatTitle; });
 const _chatTitle= (channel)=>{
+  if(channel && channel.members){
     return channel.members
       .map(member => {
         return member.nickname;
       })
       .join(', ');
+    }
   }
 
 /***/ }),
@@ -1299,7 +1404,7 @@ const protectFromXSS = text => {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<body data-gr-c-s-loaded=\"true\">\n      <div class=\"list-root\">\n        <div class=\"list-body\">\n            <div class=\"list-top\">\n              <div class=\"list-title\">User List</div>\n              <div class=\"list-button\">\n                <div class=\"button-create\">CREATE</div>\n                <div class=\"button-exit\" (click)=\"goBack()\">\n\n                </div>\n              </div>\n            </div>\n            <div class=\"list-hr\"></div>\n            <div class=\"list-content\">\n                <div id=\"{{user.userId}}\" class=\"user-item\" *ngFor=\"let user of userList\">\n                  <div class=\"user-info\">\n                    <div class=\"user-profile\" style=\"background-image: url(&quot;https://sendbird.com/main/img/profiles/profile_37_512px.png&quot;);\">\n                    </div><div class=\"user-nickname\">{{user.nickname}}</div>\n                    <div class=\"user-online\"></div>\n                  </div><div class=\"user-state\">\n                    <div class=\"user-time\">{{timestampToTime(user.lastSeenAt)}}</div>\n                    <div class=\"user-select\"></div>\n                  </div></div>\n            </div>\n        </div>\n      </div>\n  \n </body>"
+module.exports = "\n<body data-gr-c-s-loaded=\"true\">\n      <div class=\"list-root\">\n        <div class=\"list-body\">\n            <div class=\"list-top\">\n              <div class=\"list-title\">User List</div>\n              <div class=\"list-button\">\n                <div class=\"button-create\" (click)=\"createChanel()\">CREATE</div>\n                <div class=\"button-exit\" (click)=\"goBack()\">\n\n                </div>\n              </div>\n            </div>\n            <div class=\"list-hr\"></div>\n            <div class=\"list-content\">\n                <div id=\"{{user.userId}}\" (click)=\"getUserId(user.userId)\" class=\"user-item\" *ngFor=\"let user of userList\">\n                  <div class=\"user-info\">\n                    <div class=\"user-profile\" style=\"background-image: url(&quot;https://sendbird.com/main/img/profiles/profile_37_512px.png&quot;);\">\n                    </div><div class=\"user-nickname\">{{user.nickname}}</div>\n                    <div class=\"user-online\"></div>\n                  </div><div class=\"user-state\">\n                    <div class=\"user-time\">{{timestampToTime(user.lastSeenAt)}}</div>\n                    <div   [ngClass]=\"{'user-select':!getUserId(user.userId), 'user-select active':getUserId(user.userId)}\"\n                    ></div>\n                  </div></div>\n            </div>\n        </div>\n      </div>\n  \n </body>"
 
 /***/ }),
 
@@ -1328,15 +1433,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _chat_page_js_components_SendBirdAction__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../chat-page/js-components/SendBirdAction */ "./src/app/sendbird-dashboard/components/chat-page/js-components/SendBirdAction.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _chat_page_js_components_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../chat-page//js-components/utils */ "./src/app/sendbird-dashboard/components/chat-page/js-components/utils.js");
+/* harmony import */ var _chat_page_js_components_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../chat-page/js-components/utils */ "./src/app/sendbird-dashboard/components/chat-page/js-components/utils.js");
+/* harmony import */ var _sendbird_dashboard_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../sendbird-dashboard.service */ "./src/app/sendbird-dashboard/sendbird-dashboard.service.ts");
+
 
 
 
 
 
 var UserListComponent = /** @class */ (function () {
-    function UserListComponent(router) {
+    function UserListComponent(router, sendbirdDashboardService) {
         this.router = router;
+        this.sendbirdDashboardService = sendbirdDashboardService;
         this.sendbirdAction = _chat_page_js_components_SendBirdAction__WEBPACK_IMPORTED_MODULE_2__["SendBirdAction"].getInstance();
     }
     UserListComponent.prototype.ngOnInit = function () {
@@ -1349,8 +1457,32 @@ var UserListComponent = /** @class */ (function () {
             console.log(err);
         });
     };
+    UserListComponent.prototype.getUserId = function (userId) {
+        var index = this.sendbirdDashboardService.selectedUserIds.indexOf(userId);
+        if (index > -1) {
+            this.sendbirdDashboardService.selectedUserIds.splice(index, 1);
+            return false;
+        }
+        else {
+            this.sendbirdDashboardService.selectedUserIds.push(userId);
+            return true;
+        }
+    };
     UserListComponent.prototype.goBack = function () {
         this.router.navigate(['/chat']);
+    };
+    UserListComponent.prototype.createChanel = function () {
+        var _this = this;
+        _chat_page_js_components_SendBirdAction__WEBPACK_IMPORTED_MODULE_2__["SendBirdAction"].getInstance()
+            .createGroupChannel(this.sendbirdDashboardService.selectedUserIds)
+            .then(function (channel) {
+            _this.sendbirdDashboardService.channelList.unshift(channel);
+        })
+            .catch(function (error) {
+            console.log(error.message);
+        });
+        this.sendbirdDashboardService.selectedUserIds = [];
+        this.goBack();
     };
     UserListComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1358,7 +1490,7 @@ var UserListComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./user-list.component.html */ "./src/app/sendbird-dashboard/components/user-list/user-list.component.html"),
             styles: [__webpack_require__(/*! ./user-list.component.scss */ "./src/app/sendbird-dashboard/components/user-list/user-list.component.scss")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"], _sendbird_dashboard_service__WEBPACK_IMPORTED_MODULE_5__["SendbirdDashboardService"]])
     ], UserListComponent);
     return UserListComponent;
 }());
@@ -1416,7 +1548,7 @@ var UserLoginComponent = /** @class */ (function () {
     };
     UserLoginComponent.prototype.onSubmit = function (f) {
         this.sendbirdDashboardService.setUserData(f.value);
-        this.router.navigate(['/chat']);
+        this.router.navigate(['chat']);
     };
     UserLoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1519,7 +1651,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var routes = [
-    { path: 'login', component: _components_user_login_user_login_component__WEBPACK_IMPORTED_MODULE_3__["UserLoginComponent"] },
+    { path: '', component: _components_user_login_user_login_component__WEBPACK_IMPORTED_MODULE_3__["UserLoginComponent"] },
     { path: 'chat', component: _components_chat_page_chat_page_component__WEBPACK_IMPORTED_MODULE_4__["ChatPageComponent"], canActivate: [_can_activate_route_guard__WEBPACK_IMPORTED_MODULE_5__["CanActivateRouteGuard"]] },
     { path: 'chat/userlist', component: _components_user_list_user_list_component__WEBPACK_IMPORTED_MODULE_6__["UserListComponent"] },
     { path: '**', component: _components_user_login_user_login_component__WEBPACK_IMPORTED_MODULE_3__["UserLoginComponent"] }
@@ -1604,7 +1736,7 @@ __webpack_require__.r(__webpack_exports__);
 var SendbirdDashboardService = /** @class */ (function () {
     function SendbirdDashboardService() {
         this.userData = null;
-        this.channelList = null;
+        this.selectedUserIds = [];
     }
     SendbirdDashboardService.prototype.setUserData = function (data) {
         this.userData = data;
